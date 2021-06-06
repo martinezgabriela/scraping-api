@@ -6,7 +6,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.br.gabriela.scrapingapi.dto.NoticiaDTO;
+import com.br.gabriela.scrapingapi.dto.NoticiaRequestDTO;
 import com.br.gabriela.scrapingapi.dto.NoticiaResponseDTO;
 import com.br.gabriela.scrapingapi.entity.Noticia;
 import com.br.gabriela.scrapingapi.exceptions.StandardError;
@@ -27,6 +31,7 @@ import io.swagger.annotations.ApiResponses;
 @Api("API de notícias")
 @RestController
 @RequestMapping("/api/v1/noticias")
+@CrossOrigin
 public class NoticiaController {
 	
 	@Autowired
@@ -42,9 +47,9 @@ public class NoticiaController {
 		@ApiResponse(code = 404, message = "Not found", response = StandardError.class),
 		@ApiResponse(code = 500, message = "Internal server error", response = StandardError.class)
 	})
-	@GetMapping("/search")
-	public ResponseEntity<NoticiaResponseDTO> buscarNoticiaPorPalavraChave(@RequestParam(required=true) String palavraChave){
-		return ResponseEntity.ok().body(noticiaService.buscarNoticiaByConteudo(palavraChave));
+	@GetMapping("/{keyWord}")
+	public ResponseEntity<NoticiaResponseDTO> buscarNoticiaPorPalavraChave(@PathVariable String keyWord){
+		return ResponseEntity.ok().body(noticiaService.buscarNoticiaByConteudo(keyWord));
 	}
 	
 	@ApiOperation(value = "Listar todas as notícias cadastradas.")
@@ -72,8 +77,8 @@ public class NoticiaController {
 		@ApiResponse(code = 500, message = "Internal server error", response = StandardError.class)
 	})
 	@PostMapping
-	public ResponseEntity<Noticia> cadastrarNoticia(@Valid @RequestBody String url){
-		Noticia noticia = noticiaService.cadastrarNoticia(url);
+	public ResponseEntity<Noticia> cadastrarNoticia(@Valid @RequestBody NoticiaRequestDTO noticiaDto){
+		Noticia noticia = noticiaService.cadastrarNoticia(noticiaDto);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")

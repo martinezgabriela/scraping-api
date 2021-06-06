@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.br.gabriela.scrapingapi.dto.NoticiaDTO;
+import com.br.gabriela.scrapingapi.dto.NoticiaRequestDTO;
 import com.br.gabriela.scrapingapi.dto.NoticiaResponseDTO;
 import com.br.gabriela.scrapingapi.entity.Noticia;
 import com.br.gabriela.scrapingapi.exceptions.BadRequestException;
@@ -37,14 +38,15 @@ public class NoticiaService {
 		return noticias;
 	}
 
-	public Noticia cadastrarNoticia(String url) {
+	public Noticia cadastrarNoticia(NoticiaRequestDTO noticia) {
+		String url = noticia.getUrl();
 		boolean exists = noticiaRepository.existsByUrl(url);
 		if(exists) {
 			throw new BadRequestException("URL já cadastrada");
 		}
 		NoticiaDTO noticiaDto = scrapingService.scrapingNoticia(url);
-		Noticia noticia = modelMapper.map(noticiaDto, Noticia.class);
-		return noticiaRepository.save(noticia);
+		Noticia noticiaSalvar = modelMapper.map(noticiaDto, Noticia.class);
+		return noticiaRepository.save(noticiaSalvar);
 	}
 	
 
