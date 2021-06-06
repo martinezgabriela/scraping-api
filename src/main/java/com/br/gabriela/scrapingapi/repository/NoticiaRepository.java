@@ -1,5 +1,6 @@
 package com.br.gabriela.scrapingapi.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +11,10 @@ import com.br.gabriela.scrapingapi.entity.Noticia;
 @Repository
 public interface NoticiaRepository extends JpaRepository<Noticia, Long>{
 	
+	 
 	public Optional<Noticia> findByUrl(String url);
 	public boolean existsByUrl(String url);
+	public List<Noticia> findByConteudoContaining(String palavraChave);
+	
 
 }

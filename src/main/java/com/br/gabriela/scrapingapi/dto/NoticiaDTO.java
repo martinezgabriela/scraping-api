@@ -30,7 +30,7 @@ public class NoticiaDTO implements Serializable {
 	private String autor;
 	@ApiModelProperty(example = "dd/mm/yyyy hh:mm")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm", timezone = "America/São_Paulo" )
-	private Calendar data;
+	private String data;
 	private String conteudo;
 
 }

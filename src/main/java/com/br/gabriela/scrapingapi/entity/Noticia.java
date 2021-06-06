@@ -47,13 +47,13 @@ public class Noticia implements Serializable {
 	@Column(name="autor")
 	private String autor;
 	
-	@ApiModelProperty (example = "dd/MM/yyyy HH:mm" )
-	@JsonFormat (pattern= "dd/MM/yyyy HH:mm", timezone = "America/Sao_Paulo")
-	@Temporal(TemporalType.TIMESTAMP)
+	//@ApiModelProperty (example = "dd/MM/yyyy HH:mm" )
+	//@JsonFormat (pattern= "dd/MM/yyyy HH:mm", timezone = "America/Sao_Paulo")
+	//@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="data")
-	private Calendar data;
+	private String data;
 	
-	@Column(name="conteudo")
+	@Column(name="conteudo", columnDefinition="LONGTEXT")
 	private String conteudo;
 
 }

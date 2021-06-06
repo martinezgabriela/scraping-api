@@ -21,10 +21,14 @@ public class NoticiaService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private ScrapingService scrapingService;
 
-	public Noticia buscarNoticiaById(Long id) {
-		return noticiaRepository.findById(id)
-				.orElseThrow(() -> new NotFoundException("Nenhuma notícia encontrada com o id: " + id));
+	public NoticiaResponseDTO buscarNoticiaByConteudo(String palavraChave) {
+		NoticiaResponseDTO noticias = new NoticiaResponseDTO();
+		noticias.setNoticias(noticiaRepository.findByConteudoContaining(palavraChave));
+		return noticias;
 	}
 
 	public NoticiaResponseDTO listarNoticias() {		
@@ -33,11 +37,12 @@ public class NoticiaService {
 		return noticias;
 	}
 
-	public Noticia cadastrarNoticia(NoticiaDTO noticiaDto) {
-		boolean exists = noticiaRepository.existsByUrl(noticiaDto.getUrl());
+	public Noticia cadastrarNoticia(String url) {
+		boolean exists = noticiaRepository.existsByUrl(url);
 		if(exists) {
 			throw new BadRequestException("URL já cadastrada");
 		}
+		NoticiaDTO noticiaDto = scrapingService.scrapingNoticia(url);
 		Noticia noticia = modelMapper.map(noticiaDto, Noticia.class);
 		return noticiaRepository.save(noticia);
 	}
