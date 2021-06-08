@@ -17,7 +17,7 @@ public class ScrapingUtil {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScrapingUtil.class);
 	
-	private static final String TITULO_NOTICIA = "div[class=col post-header border-b my-5 px-0 pb-5]";
+	private static final String TITULO_NOTICIA = "h1[class=page-title-1]";
 	private static final String SUBTITULO_NOTICA = "p[class=article-lead]";
 	private static final String AUTOR_NOTICIA = "span[class=author-name]";
 	private static final String DATA_PUBLICACAO = "time[class=entry-date published]";
@@ -56,7 +56,7 @@ public class ScrapingUtil {
 	
 	public String obtemTituloNoticia(Document document, String itemHtml) {
 		Element elementTitulo = document.select(itemHtml).first();
-		String titulo = elementTitulo.select("h1").text();
+		String titulo = elementTitulo.text();
 		return titulo;
 	}
 	
